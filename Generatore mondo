@@ -1,0 +1,34 @@
+# generatore_iptv.py
+
+# 1. Definisci la lista dei tuoi canali
+# Aggiungi qui i tuoi canali seguendo la struttura: (Nome, Categoria, Link del flusso)
+canali = [
+    ("Rai 1 HD", "Nazionali", "http://esempio.com"),
+    ("Rai 2 HD", "Nazionali", "http://esempio.com"),
+    ("Sky TG24", "News", "http://esempio.com"),
+    ("Sport Italia", "Sport", "http://esempio.com"),
+]
+
+# 2. Nome del file .m3u che verrà generato
+nome_file_output = "lista_canali.m3u"
+
+def genera_m3u(lista_canali, output_file):
+    try:
+        with open(output_file, "w", encoding="utf-8") as f:
+            # Intestazione standard del formato M3U
+            f.write("#EXTM3U\n\n")
+            
+            # Scrittura dei singoli canali
+            for nome, categoria, url in lista_canali:
+                # Scrive i metadati del canale (nome e gruppo/categoria)
+                f.write(f'#EXTINF:-1 group-title="{categoria}",{nome}\n')
+                # Scrive il link dello streaming
+                f.write(f"{url}\n\n")
+                
+        print(f"🎉 File '{output_file}' generato con successo con {len(lista_canali)} canali!")
+    except Exception as e:
+        print(f"❌ Errore durante la generazione del file: {e}")
+
+# Esegue la funzione
+if __name__ == "__main__":
+    genera_m3u(canali, nome_file_output)
