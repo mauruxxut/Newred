@@ -1,0 +1,33 @@
+name: Generatore Automatico Playlist IPTV
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-playlist:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Recupera il codice
+      uses: actions/checkout@v4
+
+    - name: Configura Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Installa i moduli necessari
+      run: pip install requests
+
+    - name: Esegui il Generatore
+      run: python generatore_iptv.py
+
+    - name: Pubblica la nuova playlist
+      run: |
+        git config --global user.name "IPTV Generator Bot"
+        git config --global user.email "generator@bot.com"
+        git add playlist_generata.m3u
+        git commit -m "Playlist generata automaticamente" || exit 0
+        git push
+        
